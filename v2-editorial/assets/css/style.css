@@ -1,0 +1,1656 @@
+/* =========================================
+   1. Design Token & Themes
+   ========================================= */
+:root {
+  /* 基础参数 */
+  --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --radius-md: 8px;
+  --radius-full: 999px;
+  --container-width: 1024px;
+  --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-emphasis: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 180ms;
+  --duration-base: 480ms;
+  
+  /* [Light Mode] VS Code 2026-inspired light theme */
+  --bg-body: #f3f3f3;
+  --bg-editor: #ffffff;
+  --bg-card: #ffffff;
+  --bg-panel: #f8f8f8;
+  --bg-sidebar: #f3f3f3;
+  --bg-toolbar: #f3f3f3;
+  --bg-glass: rgba(243, 243, 243, 0.94);
+  --bg-hover: #e8e8e8;
+  --bg-active: #e6f3ff;
+  --bg-terminal: #ffffff;
+  
+  --text-main: #1f1f1f;
+  --text-muted: #616161;
+  --text-subtle: #8a8a8a;
+  --text-invert: #ffffff;
+  
+  --primary: #0078d4;
+  --primary-hover: #005a9e;
+  --primary-glow: rgba(0, 120, 212, 0.18);
+  --selection: #add6ff;
+  --terminal-user: #0078d4;
+  --terminal-path: #795e26;
+  
+  --border-light: #d0d0d0;
+  --border-strong: #b8b8b8;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 8px 18px rgba(0, 0, 0, 0.09);
+  --shadow-hover: 0 14px 30px rgba(0, 0, 0, 0.12);
+  
+  --gradient-title: linear-gradient(135deg, #1f1f1f 0%, #0078d4 100%);
+  --decoration-blob: #dcdcdc;
+}
+
+/* [Dark Mode] VS Code 2026-inspired dark theme */
+[data-theme="dark"] {
+  --bg-body: #1e1e1e;
+  --bg-editor: #1e1e1e;
+  --bg-card: #252526;
+  --bg-panel: #181818;
+  --bg-sidebar: #181818;
+  --bg-toolbar: #2d2d30;
+  --bg-glass: rgba(37, 37, 38, 0.9);
+  --bg-hover: #2d2d30;
+  --bg-active: #04395e;
+  --bg-terminal: #1e1e1e;
+  
+  --text-main: #cccccc;
+  --text-muted: #9d9d9d;
+  --text-subtle: #6f6f6f;
+  
+  --primary: #3794ff;
+  --primary-hover: #4fc1ff;
+  --primary-glow: rgba(55, 148, 255, 0.24);
+  --selection: #264f78;
+  --terminal-user: #4ec9b0;
+  --terminal-path: #dcdcaa;
+  
+  --border-light: #3c3c3c;
+  --border-strong: #5a5a5a;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-card: 0 10px 24px rgba(0, 0, 0, 0.28);
+  --shadow-hover: 0 16px 32px rgba(0, 0, 0, 0.36);
+  
+  --gradient-title: linear-gradient(135deg, #cccccc 0%, #3794ff 100%);
+  --decoration-blob: #333333;
+}
+
+/* =========================================
+   2. Global Reset & Layout
+   ========================================= */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  width: 100%;
+  max-width: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  line-height: 1.6;
+  /* 关键：平滑过渡背景色和文字颜色 */
+  transition: background-color 0.4s ease, color 0.4s ease;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@supports (overflow: clip) {
+  html,
+  body {
+    overflow-x: clip;
+  }
+}
+
+/* 新增：全局图片约束，防止图片撑破布局 */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a { text-decoration: none; color: inherit; transition: var(--transition-base); }
+ul { list-style: none; }
+
+::selection {
+  background: var(--selection);
+  color: var(--text-main);
+}
+
+:focus-visible {
+  outline: 1px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.section-padding { padding: 64px 0; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.column { flex-direction: column; }
+
+section[id] { scroll-margin-top: 88px; }
+
+/* 滚动条美化 */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-sidebar); }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-subtle); }
+
+/* =========================================
+   3. Navigation (Glassmorphism)
+   ========================================= */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-light);
+  transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+
+.nav-container {
+  height: 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--text-main);
+}
+
+.logo-terminal {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 24px;
+  padding: 0 8px;
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  background: var(--bg-terminal);
+  color: var(--text-main);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: inset 0 0 0 1px var(--primary-glow);
+}
+
+.terminal-user { color: var(--terminal-user); }
+.terminal-path { color: var(--terminal-path); }
+.terminal-symbol { color: var(--text-main); }
+
+.terminal-cursor {
+  width: 6px;
+  height: 12px;
+  margin-left: 3px;
+  background: var(--primary);
+  opacity: 0.9;
+}
+
+.nav-actions { display: flex; align-items: center; gap: 24px; }
+
+.nav-links { display: flex; gap: 18px; }
+.nav-links a {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 2px;
+  background: var(--primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration-fast) var(--ease-standard);
+}
+.nav-links a:hover, .nav-links a.active { color: var(--primary); }
+.nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+
+.nav-controls { display: flex; align-items: center; gap: 12px; }
+
+/* 按钮通用样式 */
+.control-btn {
+  background: var(--bg-toolbar);
+  border: 1px solid var(--border-light);
+  color: var(--text-main);
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: color var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard), background-color var(--duration-fast) var(--ease-standard), transform var(--duration-fast) var(--ease-standard);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-strong);
+  color: var(--primary);
+}
+
+/* 主题切换按钮特殊处理 */
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle i {
+  position: absolute;
+  transition: transform 420ms var(--ease-emphasis), opacity 320ms var(--ease-standard);
+}
+
+/* 图标切换动画逻辑 */
+[data-theme="light"] .moon-icon { transform: translateY(20px) rotate(90deg); opacity: 0; }
+[data-theme="light"] .sun-icon { transform: translateY(0) rotate(0); opacity: 1; }
+[data-theme="dark"] .sun-icon { transform: translateY(-20px) rotate(-90deg); opacity: 0; }
+[data-theme="dark"] .moon-icon { transform: translateY(0) rotate(0); opacity: 1; }
+
+/* =========================================
+   4. Hero Section / Intro
+   ========================================= */
+.intro {
+  padding: 84px 0 44px;
+  position: relative;
+  text-align: center;
+}
+
+/* 背景装饰球 */
+.bg-decoration {
+  display: none;
+}
+
+.avatar-container {
+  position: relative;
+  margin-bottom: 18px;
+  opacity: 0;
+  animation: intro-fade-up 620ms var(--ease-emphasis) 120ms forwards;
+}
+
+.avatar {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--bg-editor);
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0; /* 防止头像被挤压 */
+}
+
+.avatar-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--primary);
+  filter: blur(25px);
+  opacity: 0.4;
+  z-index: 1;
+  transform: scale(0.9);
+  transition: opacity 0.3s;
+}
+.avatar-container:hover .avatar-glow { opacity: 0.7; }
+
+.gradient-text {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: var(--text-main);
+  letter-spacing: 0;
+  opacity: 0;
+  animation: intro-fade-up 620ms var(--ease-emphasis) 210ms forwards;
+}
+
+.subtitle {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  max-width: 700px;
+  margin: 0 auto;
+  opacity: 0;
+  animation: intro-fade-up 620ms var(--ease-emphasis) 300ms forwards;
+}
+
+.intro-contact-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: intro-fade-up 620ms var(--ease-emphasis) 390ms forwards;
+}
+
+.intro-contact-link {
+  min-height: 36px;
+  padding: 0 13px;
+  border-radius: 6px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-editor);
+  color: var(--text-main);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard), background-color var(--duration-fast) var(--ease-standard);
+}
+
+.intro-contact-link span {
+  white-space: nowrap;
+}
+
+.intro-contact-link i {
+  font-size: 0.82rem;
+}
+
+.intro-contact-link:hover {
+  background: var(--bg-active);
+  color: var(--primary);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+/* =========================================
+   5. Projects Grid & Detail Images
+   ========================================= */
+h2 {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 32px;
+  color: var(--text-main);
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+/* 标题下划线 */
+h2::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 4px;
+  background: var(--primary);
+  margin: 12px auto 0;
+  border-radius: 2px;
+}
+
+.projects-grid,
+.documents-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 视频栏目卡片较矮，用网格排布更活泼；auto-fit 会自适应列数 */
+.videos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+.card {
+  background: var(--bg-editor);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+  transition: transform var(--duration-base) var(--ease-standard), box-shadow var(--duration-base) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);
+  display: flex;
+  flex-direction: column;
+  /* 解决 Safari 下圆角溢出问题 */
+  transform: translateZ(0); 
+}
+
+.project-card {
+  display: grid;
+  grid-template-columns: minmax(240px, 36%) minmax(0, 1fr);
+  width: 100%;
+  max-width: 100%;
+  min-height: 260px;
+}
+
+.project-card--text-only {
+  grid-template-columns: 1fr;
+  min-height: 0;
+}
+
+.project-card--text-only .project-info {
+  padding: 22px 24px;
+}
+
+.project-card--text-only .project-info p {
+  margin-bottom: 12px;
+}
+
+.project-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 12px;
+  margin-top: auto;
+}
+
+.project-meta-row .project-tags {
+  flex: 1 1 320px;
+  min-width: 0;
+  margin: 0;
+}
+
+.project-meta-row .project-actions {
+  flex: 0 0 auto;
+  margin-top: 0;
+  margin-left: auto;
+}
+
+.project-card--text-only .project-action {
+  min-height: 32px;
+  padding: 7px 11px;
+  font-size: 0.84rem;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card);
+  border-color: var(--primary);
+}
+
+/* 首页项目卡片缩略图 - 优化适配 */
+.project-thumbnail {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  padding: 14px;
+  transition: transform var(--duration-base) var(--ease-standard);
+  background-color: transparent;
+}
+
+.project-thumbnail--cover {
+  padding: 0;
+  object-fit: cover;
+  object-position: center 35%;
+}
+
+.card:hover .project-thumbnail { transform: scale(1.02); }
+
+.project-thumbnail-wrapper {
+  position: relative;
+  min-height: 260px;
+  overflow: hidden;
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-info {
+  padding: 24px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.project-info h3 {
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+  color: var(--text-main);
+  overflow-wrap: anywhere;
+}
+
+.project-info p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  overflow-wrap: anywhere;
+}
+
+.project-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.project-action {
+  min-height: 36px;
+  padding: 8px 13px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.86rem;
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--bg-panel);
+  line-height: 1;
+  transition: transform var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard), background-color var(--duration-fast) var(--ease-standard);
+}
+
+.project-action:hover {
+  background: var(--bg-active);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+@keyframes intro-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================
+   7. Footer
+   ========================================= */
+
+footer {
+  text-align: center;
+  padding: 30px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-sidebar);
+}
+
+/* =========================================
+   8. Mobile Responsive
+   ========================================= */
+@media (max-width: 768px) {
+  .nav-container {
+    height: auto;
+    min-height: 64px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 12px;
+    row-gap: 8px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .nav-actions { display: contents; }
+
+  .logo {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+  }
+
+  .nav-controls {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    min-width: 0;
+  }
+
+  .nav-links {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    overflow-x: auto;
+    padding: 2px 0 4px;
+    scrollbar-width: none;
+  }
+
+  .nav-links::-webkit-scrollbar { display: none; }
+
+  .nav-links a { flex: 0 0 auto; }
+
+  .container { padding: 0 16px; }
+  
+  .section-padding { padding: 48px 0; }
+  section[id] { scroll-margin-top: 132px; }
+  .intro { padding-top: 56px; }
+  .gradient-text {
+    width: 100%;
+    max-width: 100%;
+    font-size: 2rem;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+  .subtitle {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+  .nav-actions { gap: 12px; }
+  .nav-controls { gap: 8px; }
+  .control-btn { padding: 6px 10px; }
+  .logo { font-size: 1.1rem; }
+  .logo-terminal {
+    height: 22px;
+    padding: 0 7px;
+    font-size: 0.68rem;
+  }
+  .project-card {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .project-card--text-only .project-info {
+    padding: 20px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .project-meta-row .project-tags {
+    flex-basis: 100%;
+  }
+
+  .project-meta-row .project-actions {
+    width: 100%;
+    margin-left: 0;
+    justify-content: flex-start;
+  }
+
+  .project-card--text-only .project-meta-row {
+    display: block;
+  }
+
+  .project-card--text-only .project-tags {
+    display: flex;
+    margin-bottom: 10px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .project-card--text-only .project-actions {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .project-thumbnail-wrapper {
+    height: 190px;
+    min-height: 190px;
+    border-right: 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  /* 手机端图片适配 */
+  .avatar {
+    width: 120px;
+    height: 120px;
+  }
+  .project-thumbnail {
+    height: 100%;
+  }
+  
+  .intro-contact-links {
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .timeline-container {
+    padding-left: 24px;
+  }
+
+  .timeline-dot {
+    left: -28px;
+  }
+}
+
+@media (max-width: 360px) {
+  .gradient-text { font-size: 1.75rem; }
+}
+
+
+/* =========================================
+   10. Timeline Section (New)
+   ========================================= */
+.timeline-container {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  padding-left: 30px;
+}
+
+/* Vertical Line */
+.timeline-container::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border-strong);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 28px;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -35px; /* Adjust based on padding */
+  top: 5px;
+  width: 12px;
+  height: 12px;
+  background: var(--bg-editor);
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.timeline-date {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.timeline-content h3 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  color: var(--text-main);
+}
+
+.timeline-content p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+/* =========================================
+   11. Tech Stack Section (New)
+   ========================================= */
+.skills-wrapper {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.skill-category h3 {
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+  color: var(--text-main);
+  border-left: 3px solid var(--primary);
+  padding-left: 12px;
+}
+
+.skill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skill-badge {
+  padding: 7px 12px;
+  background: var(--bg-editor);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition: transform var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);
+}
+
+.skill-badge:hover {
+  background: var(--bg-active);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 1000px) {
+  .skills-wrapper {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .skills-wrapper {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .skills-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  filter: blur(2px);
+  transition: opacity var(--duration-base) var(--ease-standard), transform var(--duration-base) var(--ease-standard), filter var(--duration-base) var(--ease-standard);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar-container,
+  .gradient-text,
+  .subtitle,
+  .intro-contact-links {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+}
+
+/* 修复主题切换按钮的点击响应 */
+.theme-toggle {
+  cursor: pointer;
+  z-index: 10; /* 提高层级 */
+  /* 确保按钮有足够空间容纳图标 */
+  width: 40px; 
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 防止图标拦截鼠标事件，确保点击穿透到 button */
+.theme-toggle i {
+  pointer-events: none; 
+}
+
+/* 确保导航栏层级够高 */
+nav {
+  z-index: 1000;
+}
+
+/* ... Previous CSS ... */
+
+/* =========================================
+   12. Project Tags (New)
+   ========================================= */
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 20px;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.project-tag {
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  background: var(--bg-active);
+  color: var(--primary);
+  border-radius: 4px;
+  font-weight: 500;
+  border: 1px solid var(--border-light);
+  overflow-wrap: anywhere;
+}
+
+/* Adjust paragraph margin in project info to accommodate tags */
+.project-info p {
+  margin-bottom: 16px; 
+}
+
+/* =========================================
+   13. Empty State（板块暂无内容时的提示）
+   ========================================= */
+.empty-state {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 48px 24px;
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-subtle);
+  background: var(--bg-panel);
+  border: 1px dashed var(--border-light);
+  border-radius: var(--radius-md);
+  overflow-wrap: anywhere;
+}
+
+.timeline-container > .empty-state {
+  margin-left: 0;
+}
+
+@media (max-width: 768px) {
+  .empty-state {
+    padding: 36px 18px;
+    font-size: 0.95rem;
+  }
+}
+
+/* 时间轴 / 技术栈为空时不显示多余的装饰线，并让提示占满整行 */
+.timeline-container:has(> .empty-state) {
+  padding-left: 0;
+}
+
+.timeline-container:has(> .empty-state)::before {
+  display: none;
+}
+
+.skills-wrapper:has(> .empty-state) {
+  grid-template-columns: 1fr;
+}
+
+/* =========================================
+   14. Video Cards（自媒体视频栏目）
+   ========================================= */
+.video-card .project-info h3 {
+  padding-right: 0;
+}
+
+/* 平台角标：Bilibili / Douyin / YouTube ... */
+.video-platform {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  margin-right: auto;
+  padding: 3px 10px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--primary);
+  background: var(--bg-active);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-full);
+}
+
+.video-platform i {
+  font-size: 0.62rem;
+}
+
+/* 视频卡片左侧加一条主色竖条，与文章卡片区分开 */
+.video-card {
+  border-left: 3px solid var(--primary);
+}
+
+/* =========================================
+   15. Liveliness Layer（活力化动效）
+   在不改变任何结构与渲染逻辑的前提下，纯 CSS 增强观感
+   ========================================= */
+
+/* --- 15.1 自我介绍区背景光斑（原本 display:none，这里启用）--- */
+.intro .bg-decoration {
+  display: block;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.intro {
+  position: relative;
+  overflow: hidden;
+}
+
+.intro .bg-decoration::before,
+.intro .bg-decoration::after {
+  content: '';
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.16;
+  will-change: transform;
+}
+
+.intro .bg-decoration::before {
+  top: -160px;
+  left: -120px;
+  background: var(--primary);
+  animation: float-blob 18s var(--ease-standard) infinite alternate;
+}
+
+.intro .bg-decoration::after {
+  right: -140px;
+  bottom: -180px;
+  background: var(--terminal-user);
+  opacity: 0.12;
+  animation: float-blob 22s var(--ease-standard) infinite alternate-reverse;
+}
+
+@keyframes float-blob {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(60px, 40px, 0) scale(1.15); }
+}
+
+/* 光斑在背景层，内容需在其之上 */
+.intro .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* --- 15.2 头像：缓慢旋转的渐变光环 --- */
+.avatar-container::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    var(--primary),
+    var(--terminal-user),
+    var(--terminal-path),
+    var(--primary)
+  );
+  opacity: 0.45;
+  filter: blur(14px);
+  animation: spin-slow 12s linear infinite;
+  transition: opacity var(--transition-base);
+}
+
+.avatar-container:hover::before {
+  opacity: 0.8;
+}
+
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+/* --- 15.3 标题下划线：划过时展开成渐变色 --- */
+h2::after {
+  background: linear-gradient(90deg, var(--primary), var(--terminal-user));
+  transition: width var(--transition-base), background var(--transition-base);
+}
+
+h2:hover::after {
+  width: 88px;
+}
+
+/* --- 15.4 栏目副标题（用于视频栏目等）--- */
+.section-hint {
+  text-align: center;
+  margin: -18px 0 32px;
+  font-size: 0.92rem;
+  color: var(--text-subtle);
+}
+
+/* --- 15.5 卡片悬停：轻微上浮 + 更明显的阴影 --- */
+.project-card {
+  transition: transform var(--duration-fast) var(--ease-standard),
+              box-shadow var(--transition-base),
+              border-color var(--transition-base);
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+}
+
+/* --- 15.6 标签悬停：主色填充 --- */
+.project-tag {
+  transition: background-color var(--duration-fast) ease,
+              color var(--duration-fast) ease,
+              transform var(--duration-fast) ease;
+}
+
+.project-tag:hover {
+  background: var(--primary);
+  color: var(--text-invert);
+  transform: translateY(-1px);
+  border-color: var(--primary);
+}
+
+/* --- 15.7 时间轴圆点：柔和的呼吸脉冲 --- */
+.timeline-dot::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  opacity: 0;
+  animation: dot-pulse 2.6s var(--ease-standard) infinite;
+}
+
+@keyframes dot-pulse {
+  0%   { opacity: 0.6; transform: scale(0.8); }
+  70%  { opacity: 0;   transform: scale(1.6); }
+  100% { opacity: 0;   transform: scale(1.6); }
+}
+
+/* --- 15.8 技能徽章悬停：图标轻微弹起 --- */
+.skill-badge {
+  transition: transform var(--duration-fast) var(--ease-standard),
+              border-color var(--transition-base),
+              box-shadow var(--transition-base);
+}
+
+.skill-badge:hover {
+  transform: translateY(-2px);
+}
+
+.skill-badge i {
+  transition: transform var(--duration-fast) var(--ease-standard);
+}
+
+.skill-badge:hover i {
+  transform: scale(1.15) rotate(-6deg);
+}
+
+/* --- 15.9 联系入口按钮悬停：图标轻微位移 --- */
+.intro-contact-link i {
+  transition: transform var(--duration-fast) var(--ease-standard);
+}
+
+.intro-contact-link:hover i {
+  transform: translateX(3px) scale(1.08);
+}
+
+/* --- 15.10 Logo 打字机光标（结构未变，仅强化视觉）--- */
+.logo-terminal:hover .terminal-cursor {
+  animation-duration: 0.7s;
+}
+
+/* 打字机动画只在脚本成功测量宽度后由 .is-typing 启用，
+   避免脚本失败或禁用 JS 时内容被裁掉 */
+.logo-terminal.is-typing .terminal-typewriter {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: bottom;
+  animation: typewriter-reveal 1.05s steps(24, end) 300ms both;
+}
+
+@keyframes typewriter-reveal {
+  from { width: 0; }
+  to   { width: var(--typewriter-width, 100%); }
+}
+
+/* --- 15.11 尊重系统「减少动态效果」设置 --- */
+@media (prefers-reduced-motion: reduce) {
+  .intro .bg-decoration::before,
+  .intro .bg-decoration::after,
+  .avatar-container::before,
+  .timeline-dot::after {
+    animation: none;
+  }
+
+  .logo-terminal.is-typing .terminal-typewriter {
+    animation: none;
+    width: auto;
+    overflow: visible;
+  }
+
+  .project-card:hover,
+  .project-tag:hover,
+  .skill-badge:hover {
+    transform: none;
+  }
+}
+
+
+/* ===========================================================================
+   15. 站点主题定稿（方案 B：温润刊物 / Editorial）
+   ---------------------------------------------------------------------------
+   以下规则来自改版方案 preview/vB.css，已改写为整站默认样式。
+   本方案提供「亮 / 暗」两套完整令牌：
+     html:not([data-theme="dark"])  → 亮色
+     html[data-theme="dark"]        → 暗色
+   默认观感偏向 light 主题；index.html 与 main 分支保持逐字一致。
+   =========================================================================== */
+
+﻿/* ===========================================================================
+   改版方案 B —— 「温润刊物」 （Editorial / Paper）
+   ---------------------------------------------------------------------------
+   设计取向：把个人主页当成一本纸质刊物来排版。衬线标题、暖白纸张底色、
+             居中对称的版式、细发丝分隔线，强调「可阅读、耐看、有质感」。
+   适用人群：偏内容型的博客、写长文、希望给访问者沉稳专业印象的人。
+   取舍：视觉冲击力弱于 C，动效克制；但最不容易看腻，也最适合长文阅读。
+   ---------------------------------------------------------------------------
+   实现约定：加载在 style.css 之后，只覆盖样式，不改动 HTML 结构。
+   =========================================================================== */
+
+/* ---------- 1. 设计令牌（亮色） ---------- */
+html:not([data-theme="dark"]) {
+  --font-display: Georgia, "Times New Roman", "Songti SC", "Noto Serif SC", "Source Han Serif SC",
+    "SimSun", serif;
+
+  --bg-body: #f7f3ec;
+  --bg-editor: #fffdf8;
+  --bg-card: #fffdf8;
+  --bg-panel: #f2ece1;
+  --bg-sidebar: #efe8dc;
+  --bg-toolbar: #efe8dc;
+  --bg-glass: rgba(247, 243, 236, 0.9);
+  --bg-hover: #ece4d6;
+  --bg-active: #f0e4d2;
+
+  --text-main: #2b2622;
+  --text-muted: #6d635a;
+  --text-subtle: #948a7e;
+  --text-invert: #fffdf8;
+
+  --primary: #9a5b33;
+  --primary-hover: #7d4522;
+  --primary-glow: rgba(154, 91, 51, 0.18);
+  --selection: #e8d8c3;
+  --terminal-user: #8a6a3f;
+  --terminal-path: #a8703c;
+
+  --border-light: #e2d9ca;
+  --border-strong: #cdc1ad;
+  --radius-md: 2px;
+  --radius-full: 2px;
+
+  --shadow-sm: 0 1px 2px rgba(80, 62, 42, 0.06);
+  --shadow-card: 0 2px 10px rgba(80, 62, 42, 0.08);
+  --shadow-hover: 0 8px 24px rgba(80, 62, 42, 0.12);
+
+  --gradient-title: linear-gradient(135deg, #2b2622 0%, #9a5b33 100%);
+}
+
+/* 暗色下切换为暖黑，保持纸质气质 */
+html[data-theme="dark"] {
+  --font-display: Georgia, "Times New Roman", "Songti SC", "Noto Serif SC", serif;
+
+  --bg-body: #1a1714;
+  --bg-editor: #1a1714;
+  --bg-card: #221e1a;
+  --bg-panel: #1e1a16;
+  --bg-sidebar: #171412;
+  --bg-toolbar: #171412;
+  --bg-glass: rgba(26, 23, 20, 0.9);
+  --bg-hover: #2c2722;
+  --bg-active: #3a2e22;
+
+  --text-main: #ece5da;
+  --text-muted: #b3a99c;
+  --text-subtle: #8b8175;
+  --text-invert: #1a1714;
+
+  --primary: #d39a67;
+  --primary-hover: #e3b183;
+  --primary-glow: rgba(211, 154, 103, 0.22);
+  --selection: #4a3826;
+
+  --border-light: #332c25;
+  --border-strong: #4a4038;
+  --radius-md: 2px;
+  --radius-full: 2px;
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.4);
+  --shadow-hover: 0 10px 28px rgba(0, 0, 0, 0.5);
+  --gradient-title: linear-gradient(135deg, #ece5da 0%, #d39a67 100%);
+}
+
+/* ---------- 2. 纸张质感 ---------- */
+html .intro .bg-decoration {
+  display: block;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(120, 96, 68, 0.028) 0px,
+    rgba(120, 96, 68, 0.028) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+html .intro .bg-decoration::before,
+html .intro .bg-decoration::after {
+  content: none;
+  animation: none;
+}
+
+/* ---------- 3. 导航：刊物页眉 ---------- */
+html nav {
+  border-bottom: 1px solid var(--border-strong);
+  background: var(--bg-body);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+html .nav-container {
+  height: 72px;
+}
+
+html .logo {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* 终端 Logo 在刊物风里显得突兀：隐藏终端文本，改用站点名做纯文字签名。
+   站点名来自 index.html 中 .logo 的 data-site 属性，改名字只需改一处。 */
+html .logo-terminal {
+  display: none;
+}
+
+html .logo::before {
+  content: attr(data-site);
+  font-family: var(--font-display);
+  font-size: 1.34rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-main);
+}
+
+html .nav-links {
+  gap: 22px;
+}
+
+html .nav-links a {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+html .nav-links a::after {
+  height: 1px;
+  background: var(--primary);
+}
+
+html .control-btn {
+  border-radius: 2px;
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+}
+
+/* ---------- 4. 首屏：刊物封面 ---------- */
+html .avatar-container::before {
+  content: none;
+  animation: none;
+}
+
+html .avatar-glow {
+  display: none;
+}
+
+html .avatar {
+  border-radius: 2px;
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 10px 24px rgba(80, 62, 42, 0.16), 0 0 0 8px var(--bg-card),
+    0 0 0 9px var(--border-light);
+}
+
+html .gradient-text {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 2.6rem;
+  letter-spacing: -0.01em;
+  margin-bottom: 14px;
+}
+
+/* 标题上下的刊物式双线 */
+html .gradient-text::before,
+html .gradient-text::after {
+  content: "";
+  display: block;
+  width: 54px;
+  height: 1px;
+  margin: 0 auto;
+  background: var(--border-strong);
+}
+
+html .gradient-text::before {
+  margin-bottom: 22px;
+}
+
+html .gradient-text::after {
+  margin-top: 20px;
+}
+
+html .subtitle {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: 1.95;
+  color: var(--text-muted);
+}
+
+html .intro-contact-link {
+  border-radius: 2px;
+  font-family: var(--font-display);
+  font-size: 0.86rem;
+  letter-spacing: 0.03em;
+  background: transparent;
+  border: 1px solid var(--border-strong);
+}
+
+html .intro-contact-link:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--text-invert);
+}
+
+/* ---------- 5. 栏目标题：章节标题 ---------- */
+html h2 {
+  font-family: var(--font-display);
+  font-size: 1.62rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-bottom: 14px;
+}
+
+/* 原来的主色短横线改为发丝线 */
+html h2::after {
+  width: 66px;
+  height: 1px;
+  border-radius: 0;
+  background: var(--border-strong);
+  margin-top: 14px;
+  transition: width 0.4s ease;
+}
+
+html h2:hover::after {
+  width: 120px;
+}
+
+/* 标题下再加一条贯穿全宽的细线，形成刊物章节感 */
+html .section-padding .container > h2 {
+  padding-bottom: 0;
+}
+
+html .section-hint {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-style: italic;
+  margin: 0 0 30px;
+}
+
+/* ---------- 6. 卡片：刊物内框 ---------- */
+html .card,
+html .project-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 2px;
+  box-shadow: var(--shadow-card);
+}
+
+html .project-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--border-strong);
+}
+
+html .project-info h3 {
+  font-family: var(--font-display);
+  font-size: 1.22rem;
+  font-weight: 600;
+}
+
+html .project-info p {
+  font-family: var(--font-display);
+  font-size: 0.96rem;
+  line-height: 1.95;
+  color: var(--text-muted);
+}
+
+html .project-tag {
+  border-radius: 2px;
+  font-family: var(--font-display);
+  font-size: 0.74rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  color: var(--text-muted);
+}
+
+html .project-tag:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--text-invert);
+}
+
+html .project-action {
+  border-radius: 2px;
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
+}
+
+html .empty-state {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.98rem;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  border-radius: 0;
+  padding: 34px 20px;
+  color: var(--text-subtle);
+}
+
+html .video-card {
+  border-left: 1px solid var(--border-light);
+}
+
+html .video-platform {
+  border-radius: 2px;
+  font-family: var(--font-display);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: transparent;
+}
+
+/* ---------- 7. 时间轴：年表 ---------- */
+html .timeline-container {
+  max-width: 720px;
+}
+
+html .timeline-container::before {
+  width: 1px;
+  background: var(--border-strong);
+}
+
+html .timeline-dot {
+  width: 9px;
+  height: 9px;
+  left: -34px;
+  background: var(--bg-body);
+  border: 1px solid var(--primary);
+}
+
+html .timeline-dot::after {
+  border-color: var(--primary);
+}
+
+html .timeline-date {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+html .timeline-content h3 {
+  font-family: var(--font-display);
+  font-size: 1.16rem;
+  font-weight: 600;
+}
+
+html .timeline-content p {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  line-height: 1.9;
+}
+
+/* ---------- 8. 技术栈 ---------- */
+html .skill-category h3 {
+  font-family: var(--font-display);
+  font-size: 0.84rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+}
+
+html .skill-badge {
+  border-radius: 2px;
+  font-family: var(--font-display);
+  background: transparent;
+  border: 1px solid var(--border-light);
+  color: var(--text-muted);
+}
+
+html .skill-badge:hover {
+  border-color: var(--border-strong);
+  color: var(--text-main);
+  background: var(--bg-panel);
+}
+
+/* ---------- 9. 页脚：版权页 ---------- */
+html footer {
+  font-family: var(--font-display);
+  font-size: 0.86rem;
+  letter-spacing: 0.06em;
+  border-top: 1px solid var(--border-strong);
+  padding: 38px 20px;
+}
