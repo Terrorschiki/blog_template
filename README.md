@@ -107,7 +107,7 @@ python -m http.server 8000
 **方式 A：只要一个版本（推荐给使用者）**
 
 ```bash
-git clone https://github.com/Terrorschiki/blog_template.git
+git clone https://github.com/XXXX/blog_template.git
 # 挑一个版本，把它的内容拷到你的仓库根目录
 cp -r blog_template/v2-editorial/* /path/to/your-repo/
 ```
@@ -142,7 +142,7 @@ cp -r blog_template/v2-editorial/* /path/to/your-repo/
 ### 快速上手：改这几处就能变成你自己的站点
 
 1. **站点标题**：`index.html` 里的 `<title>` 和 `<meta name="description">`
-2. **终端 Logo**（V1/V3 可见）：`index.html` 中 `<span class="terminal-user">` 里的 `terrorschiki@blog`
+2. **终端 Logo**（V1/V3 可见）：`index.html` 中 `<span class="terminal-user">` 里的 `XXXX@blog`
 3. **头像**：把图片放进 `assets/images/`，改 `index.html` 里的 `<img class="avatar">` 与 `<link rel="icon">`
 4. **自我介绍**：`lang/zh.json` 与 `lang/en.json` 的 `intro.title` / `intro.desc`
 5. **页脚**：同上两个文件的 `footer.copyright`
