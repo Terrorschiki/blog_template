@@ -40,14 +40,15 @@
 
   // ---------- 2. 文章 / 文档卡片 ----------
   const DOCUMENTS = [
-    // 示例：
-    // {
-    //   titleKey: 'documents.item0.title',
-    //   descKey: 'documents.item0.desc',
-    //   links: [
-    //     { href: 'https://zhuanlan.zhihu.com/p/xxxxxxx', labelKey: 'projects.links.zhihu', icon: 'fab fa-zhihu' },
-    //   ],
-    // },
+    {
+      titleKey: 'documents.item0.title',
+      descKey: 'documents.item0.desc',
+      links: [
+        { href: 'https://github.com/XXXX/XXXX', labelKey: 'projects.links.code', icon: 'fab fa-github' },
+      ],
+    },
+    // 加第二篇：复制上面一项，把 item0 改成 item1，
+    // 再到 lang/zh.json 与 lang/en.json 里补上 documents.item1.title / .desc
   ];
 
   // ---------- 3. 自媒体账号视频 ----------

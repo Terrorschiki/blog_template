@@ -142,8 +142,10 @@ function check(name, cond, extra = '') {
   const tlHtml = containers['.timeline-container'].innerHTML;
   const contactHtml = containers['.intro-contact-links'].innerHTML;
 
-  check('文章板块显示空提示', docsHtml.includes('文章整理中'), docsHtml.trim().slice(0, 80));
-  check('文章板块没有残留卡片', !docsHtml.includes('project-card'));
+  // 模板预填了一篇示例文章，因此「文章」板块应当是「有卡片」而非空提示。
+  // 其余栏目保持为空，用来验证空状态提示。
+  check('文章板块渲染出示例卡片', docsHtml.includes('project-card'), docsHtml.trim().slice(0, 90));
+  check('文章板块不再显示空提示', !docsHtml.includes('文章整理中'));
   check('视频板块显示空提示', videoHtml.includes('VIDEOS'), videoHtml.trim().slice(0, 70));
   check('视频板块没有残留卡片', !videoHtml.includes('project-card'));
   check('项目板块显示空提示', projHtml.includes('PROJECTS'), projHtml.trim().slice(0, 60));
@@ -151,8 +153,8 @@ function check(name, cond, extra = '') {
   check('技术栈为空且不报错', containers['.skills-wrapper'].innerHTML === '');
   check('联系方式保留邮箱+GitHub', contactHtml.includes('邮箱') && contactHtml.includes('代码仓库'), contactHtml.trim().slice(0, 120));
   check('联系方式已移除 playground', !contactHtml.includes('在线策略体验'));
-  check('渲染结果不含 Lain', !JSON.stringify(containers).includes('Lain'));
-  check('渲染结果不含项目残留图片', !JSON.stringify(containers).includes('assets/images/qxzn'));
+  check('渲染结果不含模板作者信息', !JSON.stringify(containers).includes('Lain'));
+  check('渲染结果不含残留项目图片', !JSON.stringify(containers).includes('assets/images/qxzn'));
 
   // ---- 场景 B：填入示例数据，确认卡片渲染路径正常 ----
   const patched = fs

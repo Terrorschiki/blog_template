@@ -32,7 +32,11 @@
   },
   "documents": {
     "title": "Articles",
-    "empty": "Articles are being organized. Stay tuned."
+    "empty": "Articles are being organized. Stay tuned.",
+    "item0": {
+      "title": "Sample post: start here and replace it with your own",
+      "desc": "This is a filled-in article card showing what it looks like after you add content. Edit or delete it freely."
+    }
   },
   "videos": {
     "title": "My Videos",
