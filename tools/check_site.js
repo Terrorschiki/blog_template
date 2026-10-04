@@ -174,13 +174,13 @@ for (const rel of localRefs) {
 }
 
 // ---------- 6. 占位符提醒 ----------
-// 模板里刻意保留了少量占位符，提醒使用者替换成自己的信息。
-// 这些只作提醒，不算错误。
+// 模板刻意保留了占位内容，提醒使用者替换成自己的信息。这些只作提醒，不算错误。
+// 注意：站点名占位符是 4 个 X（XXXX）。这里若写成 3 个 X，会因为「XXXX 包含 XXX」
+// 而把每一个名字占位符都误报一次，所以必须用 4 个 X 匹配。
 const PLACEHOLDERS = [
+  'XXXX',
+  '填写你的',
   'your-email@example.com',
-  'XXX',
-  'your-name',
-  'your-repo',
 ];
 for (const rel of ['index.html', MAIN, 'lang/zh.json', 'lang/en.json']) {
   const src = read(rel);

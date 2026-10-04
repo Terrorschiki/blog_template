@@ -150,7 +150,7 @@ cp -r blog_template/v2-editorial/* /path/to/your-repo/
 3. **头像**：把图片放进 `assets/images/`，改 `index.html` 里的 `<img class="avatar">` 与 `<link rel="icon">`
 4. **自我介绍**：`lang/zh.json` 与 `lang/en.json` 的 `intro.title` / `intro.desc`
 5. **页脚**：同上两个文件的 `footer.copyright`
-6. **联系方式**：`assets/js/main.js` 的 `CONTACT_LINKS`（邮箱、GitHub、B站、知乎等，已写成注释，取消注释即可）
+6. **联系方式**：`assets/js/main.js` 的 `CONTACT_LINKS` —— 已备好五个入口（邮箱、哔哩哔哩、代码仓库、小红书、知乎），把链接换成你自己的即可
 
 ### 写第一篇文章
 

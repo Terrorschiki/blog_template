@@ -88,11 +88,16 @@
 
   // ---------- 6. 联系方式（Hero 区域下方的入口）----------
   const CONTACT_LINKS = [
-    { icon: 'fas fa-envelope', key: 'contact.email', link: 'mailto:XXXX@example.com' },  // ← 改成你的邮箱
-    { icon: 'fab fa-github', key: 'contact.github', link: 'https://github.com/XXXX' },
-    // { icon: 'fab fa-bilibili', key: 'contact.bilibili', link: 'https://space.bilibili.com/xxxxx' },
-    // { icon: 'fab fa-zhihu', key: 'contact.zhihu', link: 'https://www.zhihu.com/people/xxxxx' },
-    // { icon: 'fab fa-twitter', key: 'contact.twitter', link: 'https://x.com/xxxxx' },
+    // 邮箱：把「填写你的邮箱」换成真实地址（保留 mailto:）
+    { icon: 'fas fa-envelope', key: 'contact.email', link: 'mailto:填写你的邮箱@example.com' },
+    // 哔哩哔哩：换成你的空间地址，末尾的数字是你的 UID
+    { icon: 'fab fa-bilibili', key: 'contact.bilibili', link: 'https://space.bilibili.com/填写你的UID' },
+    // 代码仓库：换成你的 GitHub 主页
+    { icon: 'fab fa-github', key: 'contact.github', link: 'https://github.com/填写你的用户名' },
+    // 小红书：Font Awesome 没有小红书图标，这里用书本心形代替
+    { icon: 'fas fa-book-heart', key: 'contact.xiaohongshu', link: 'https://www.xiaohongshu.com/user/profile/填写你的ID' },
+    // 知乎：换成你的个人主页地址
+    { icon: 'fab fa-zhihu', key: 'contact.zhihu', link: 'https://www.zhihu.com/people/填写你的ID' },
   ];
 
   // ===========================================================
