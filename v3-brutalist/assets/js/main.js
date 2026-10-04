@@ -95,7 +95,7 @@
     // 代码仓库：换成你的 GitHub 主页
     { icon: 'fab fa-github', key: 'contact.github', link: 'https://github.com/填写你的用户名' },
     // 小红书：Font Awesome 没有小红书图标，这里用书本心形代替
-    { icon: 'fas fa-book-heart', key: 'contact.xiaohongshu', link: 'https://www.xiaohongshu.com/user/profile/填写你的ID' },
+    { img: 'assets/images/icon-xiaohongshu.svg', key: 'contact.xiaohongshu', link: 'https://www.xiaohongshu.com/user/profile/填写你的ID' },
     // 知乎：换成你的个人主页地址
     { icon: 'fab fa-zhihu', key: 'contact.zhihu', link: 'https://www.zhihu.com/people/填写你的ID' },
   ];
@@ -129,6 +129,19 @@
   function renderProjectTags(tags) {
     if (!Array.isArray(tags) || tags.length === 0) return '';
     return `<div class="project-tags">${renderSpanTags(tags, 'project-tag')}</div>`;
+  }
+
+  /**
+   * 生成图标 HTML。支持两种写法：
+   *   img: 'assets/images/icon-xiaohongshu.svg'  -> 用图片（适合 Font Awesome 没有的品牌图标）
+   *   icon: 'fab fa-github'                      -> 用 Font Awesome 类名
+   * 图片图标用 <img> 承载已内嵌 currentColor 的 SVG，因此会自动跟随主题文字颜色。
+   */
+  function renderIcon(entry) {
+    if (entry.img) {
+      return `<img class="icon-img" src="${entry.img}" alt="" aria-hidden="true" loading="lazy">`;
+    }
+    return `<i class="${entry.icon || 'fas fa-link'}"></i>`;
   }
 
   function renderProjectActions(links) {
@@ -353,7 +366,7 @@
       }
       item.title = label;
       item.setAttribute('aria-label', label);
-      item.innerHTML = `<span>${label}</span><i class="${contact.icon}"></i>`;
+      item.innerHTML = `<span>${label}</span>${renderIcon(contact)}`;
       container.appendChild(item);
     });
   }
