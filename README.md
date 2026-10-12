@@ -108,7 +108,7 @@ python -m http.server 8000
 **方式 A：只要一个版本（推荐给使用者）**
 
 ```bash
-git clone https://github.com/XXXX/blog_template.git
+git clone https://github.com/Terrorschiki/blog_template.git
 # 挑一个版本，把它的内容拷到你的仓库根目录
 cp -r blog_template/v2-editorial/* /path/to/your-repo/
 ```
@@ -322,3 +322,7 @@ Font Awesome 免费版有其自己的许可条款。
 
 模板最初改编自一个纯前端个人主页模板结构，此后重写了样式与内容配置方式。
 你可以自由使用、修改并用于个人或商业项目，第三方资源（图标、字体、图片）的授权请自行确认。
+
+特别感谢 [**Lain-Ego**](https://github.com/Lain-Ego0)：
+本模板的原始结构源自 Lain-Ego 的个人主页项目，这里的三套视觉风格重写与内容配置方式，
+都是在它的基础上完成的。
